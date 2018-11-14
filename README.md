@@ -4,7 +4,16 @@
 
 This python script manipulates pixel color values to hide any ascii message 'inside' an image. To decode the message the decoder will need the original image as a key and the encoded image to reveal the message.
 
+### Requirements
+
 Requires Python 2.7 and the pillow library
+
+### Usage
+
+Help:
+```
+python image_steg.py -h
+```
 
 Encoding:
 ```
