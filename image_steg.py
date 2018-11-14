@@ -84,7 +84,11 @@ def decode_image(original_image_name, encoded_image_name):
     return False
 
 def help():
-    print 'help'
+    print
+    print 'image steganography'
+    print 'encoding: python image_steg.py -e <original_image_path> -o <output_path> -m <message> '
+    print 'decoding: python image_steg.py -d <encoded_image_path> -o <original_image_path>'
+    print
     sys.exit(0)
 
 def main():
