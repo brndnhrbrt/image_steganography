@@ -1,6 +1,8 @@
 # Image Steganography
 
-Hide messages in plain sight with steganography.
+### Hide messages in plain sight with steganography.
+
+This python script manipulates pixel color values to hide any ascii message 'inside' an image. To decode the message the decoder will need the original image as a key and the encoded image to reveal the message.
 
 Requires Python 2.7 and the pillow library
 
