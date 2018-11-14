@@ -24,3 +24,39 @@ Decoding:
 ```
 decoding: python image_steg.py -d <encoded_image_path> -o <original_image_path>
 ```
+
+### Example
+
+Directory Structure
+
+```
+image_steg.py
+images/
+    input_image.png
+```
+
+Encode
+```
+python image_steg.py -e ./images/input_image.png -o ./images/output_image.png -m 'Hello, world!'
+```
+
+---
+
+New Directory Structure
+
+```
+image_steg.py
+images/
+    input_image.png
+    output_image.png
+```
+
+Decode
+```
+python image_steg.py -d ./images/output_image.png -k ./images/input_image.png
+```
+
+Output
+```
+Hello, world!
+```
