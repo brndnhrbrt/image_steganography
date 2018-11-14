@@ -35,12 +35,10 @@ images/
     input_image.png
 ```
 
-Encode
+#### Encode
 ```
 python image_steg.py -e ./images/input_image.png -o ./images/output_image.png -m 'Hello, world!'
 ```
-
----
 
 New Directory Structure
 
@@ -51,7 +49,7 @@ images/
     output_image.png
 ```
 
-Decode
+#### Decode
 ```
 python image_steg.py -d ./images/output_image.png -k ./images/input_image.png
 ```
