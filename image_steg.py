@@ -94,6 +94,7 @@ def help():
     print
     print 'image steganography'
     print 'encoding: python image_steg.py -e <original_image_path> -o <output_path> -m <message> '
+    print 'encoding: echo <message> | python image_steg.py -e <original_image_path> -o <output_path>'
     print 'decoding: python image_steg.py -d <encoded_image_path> -o <original_image_path>'
     print
     sys.exit(0)
@@ -134,6 +135,10 @@ def main():
             key_file_path = arg
         else:
             assert False, 'invalid parameter'
+    
+    if encode_mode and not len(message):
+        for line in sys.stdin:
+            message = message + line
     
     if decode_flag and encode_mode:
         print 'invalid parameters'

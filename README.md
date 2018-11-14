@@ -18,6 +18,10 @@ python image_steg.py -h
 Encoding:
 ```
 python image_steg.py -e <original_image_path> -o <output_path> -m <message>
+
+or
+
+echo <message> | python image_steg.py -e <original_image_path> -o <output_path>
 ```
 
 Decoding:
@@ -38,6 +42,10 @@ images/
 #### Encode
 ```
 python image_steg.py -e ./images/input_image.png -o ./images/output_image.png -m 'Hello, world!'
+
+or 
+
+echo 'Hello, world!' | python image_steg.py -e ./images/input_image.png -o ./images/output_image.png
 ```
 
 New Directory Structure
