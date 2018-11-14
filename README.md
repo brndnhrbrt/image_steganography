@@ -1,6 +1,6 @@
 # Image Steganography
 
-Hide images in plain sight with steganography.
+Hide messages in plain sight with steganography.
 
 Requires Python 2.7 and the pillow library
 
