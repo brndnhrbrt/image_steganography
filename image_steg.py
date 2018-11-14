@@ -29,9 +29,16 @@ def encode_image(image_name, output_image, message):
     input_image = Image.open(image_name)
     pixels = input_image.load()
     x_size = input_image.size[0]
+    y_size = input_image.size[1]
 
-    if x_size < (len(encoded_message) % 8 + 1):
-        print 'image too small'
+    max_lines = int((len(encoded_message) / max_bits) + 2)
+
+    if x_size < max_lines:
+        print 'ERROR: image width too small'
+        return False
+    
+    if y_size < max_bits:
+        print 'ERROR: image height too small'
         return False
     
     message_array = [encoded_message[i:i+max_bits] for i in range(0, len(encoded_message), max_bits)]
@@ -58,6 +65,7 @@ def encode_image(image_name, output_image, message):
     pixels[final_x,0] = new_tuple
 
     input_image.save(output_image)
+    return True
 
 def decode_image(original_image_name, encoded_image_name):
     encoded_message = ''
@@ -68,11 +76,10 @@ def decode_image(original_image_name, encoded_image_name):
     x_size = original_image.size[0]
 
     if original_image.size != encoded_image.size:
-        print 'images are not compatible'
+        print 'ERROR: images are not compatible'
         return False
     
     for x in range(0, x_size):
-        # print encoded_message
         if abs(original_pixels[x,0][0] -encoded_pixels[x,0][0]) == 3:
             return encoded_message
         else:
@@ -137,8 +144,11 @@ def main():
     
     if encode_mode:
         print 'encoding image with your message'
-        encode_image(input_file_path, output_file_path, message)
-        print 'complete'
+        sucess = encode_image(input_file_path, output_file_path, message)
+        if sucess:
+            print 'encoding complete'
+        else:
+            print 'encoding failed'        
     elif decode_flag and len(key_file_path):
         decoded_message = decode_image(key_file_path, decode_file_path)
         if decoded_message:
