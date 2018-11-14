@@ -24,46 +24,40 @@ def bin_to_string(bin_string):
         message_string = message_string + chr(int(msg_val))
     return message_string
 
-def encode_image(image_path, output_name, message):
+def encode_image(image_name, output_image, message):
     encoded_message = string_to_bin(message)
-    input_image = Image.open(image_path)
+    input_image = Image.open(image_name)
     pixels = input_image.load()
     x_size = input_image.size[0]
-    y_size = input_image.size[1]
 
-    if x_size < (len(encoded_message) % max_bits + 1):
+    if x_size < (len(encoded_message) % 8 + 1):
         print 'image too small'
         return False
     
-    if y_size < max_bits:
-        print 'image too small'
-        return False
-
     message_array = [encoded_message[i:i+max_bits] for i in range(0, len(encoded_message), max_bits)]
     for x in range(0, len(message_array)):
         for y in range(0, len(message_array[x])):
-            current_char = message_array[x][y]
-            if current_char == '1':
-                new_val = 0
+            current_char = message_array[x][y]          
+            if current_char == '1':                            
+                new_zero_val = 0
                 if pixels[x,y][0] == 255:
-                    new_val = pixels[x,y][0] - 1
+                    new_zero_val = pixels[x,y][0] - 2
                 else:
-                    new_val = pixels[x,y][0] + 1
-                new_tuple = (new_val, pixels[x,y][1], pixels[x,y][2], pixels[x,y][3])
-                pixels[x,y] = new_tuple
+                    new_zero_val = pixels[x,y][0] + 1
+                new_tuple = (new_zero_val, pixels[x,y][1], pixels[x,y][2], pixels[x,y][3])
+                pixels[x,y] = new_tuple        
     
-    flag_val = 0
+    final_zero_val = 0
     final_x = len(message_array)
     if pixels[final_x,0][0] > 252:
-        flag_val = pixels[final_x,0][0] - 3
+       final_zero_val = pixels[final_x,0][0] - 3
     else:
-        flag_val = pixels[final_x,0][0] + 3
+        final_zero_val = pixels[final_x,0][0] + 3
 
-    new_tuple = (flag_val, pixels[final_x,0][1], pixels[final_x,0][2], pixels[final_x,0][3])
-    pixels[x,y] = new_tuple
-    
-    input_image.save(output_name)
-    return True
+    new_tuple = (final_zero_val, pixels[final_x,0][1], pixels[final_x,0][2], pixels[final_x,0][3])
+    pixels[final_x,0] = new_tuple
+
+    input_image.save(output_image)
 
 def decode_image(original_image_name, encoded_image_name):
     encoded_message = ''
@@ -78,7 +72,8 @@ def decode_image(original_image_name, encoded_image_name):
         return False
     
     for x in range(0, x_size):
-        if abs(original_pixels[x,0][0] - encoded_pixels[x,0][0]) == 3:
+        # print encoded_message
+        if abs(original_pixels[x,0][0] -encoded_pixels[x,0][0]) == 3:
             return encoded_message
         else:
             for y in range(0, max_bits):
@@ -143,13 +138,11 @@ def main():
     elif decode_flag and len(key_file_path):
         decoded_message = decode_image(key_file_path, decode_file_path)
         if decoded_message:
-            print decoded_message
+            print bin_to_string(decoded_message)
         else:
             print 'decoding failed'
     else:
         print 'invalid parameters'
         help()
 
-print 'message: test'
-print string_to_bin('test')
-print bin_to_string(string_to_bin('test'))
+main()
