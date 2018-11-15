@@ -30,9 +30,13 @@ def encode_image(image_name, output_image, message):
     pixels = input_image.load()
     x_size = input_image.size[0]
     y_size = input_image.size[1]
-    max_msg_size = int(x_size * y_size / max_bits) - 1
+    max_msg_size = int(y_size / max_bits) * x_size
+    has_third_val = False
 
-    if max_msg_size < len(encoded_message):
+    if len(pixels[0,0]) > 3:
+        has_third_val = True
+
+    if max_msg_size <= (len(encoded_message) / (max_bits + 1) + 1):
         print 'ERROR: image too small'
         return False
     
@@ -54,7 +58,11 @@ def encode_image(image_name, output_image, message):
                     new_zero_val = pixels[current_x,y + current_y][0] - 2
                 else:
                     new_zero_val = pixels[current_x,y + current_y][0] + 1
-                new_tuple = (new_zero_val, pixels[current_x,y + current_y][1], pixels[current_x,y + current_y][2], pixels[current_x,y + current_y][3])
+                if has_third_val:
+                    new_tuple = (new_zero_val, pixels[current_x,y + current_y][1], pixels[current_x,y + current_y][2], pixels[current_x,y + current_y][3])
+                else:
+                    new_tuple = (new_zero_val, pixels[current_x,y + current_y][1], pixels[current_x,y + current_y][2])
+                new_tuple = (0, 0, 0)
                 pixels[current_x,y + current_y] = new_tuple        
 
     if final_x >= x_size:
@@ -67,7 +75,10 @@ def encode_image(image_name, output_image, message):
     else:
         final_zero_val = pixels[final_x,final_y][0] + 3
 
-    new_tuple = (final_zero_val, pixels[final_x,final_y][1], pixels[final_x,final_y][2], pixels[final_x,final_y][3])
+    if has_third_val:
+        new_tuple = (final_zero_val, pixels[final_x,final_y][1], pixels[final_x,final_y][2], pixels[final_x,final_y][3])
+    else:
+        new_tuple = (final_zero_val, pixels[final_x,final_y][1], pixels[final_x,final_y][2])
     pixels[final_x,final_y] = new_tuple
 
     input_image.save(output_image)
@@ -81,7 +92,7 @@ def decode_image(original_image_name, encoded_image_name):
     encoded_pixels = encoded_image.load()
     x_size = original_image.size[0]
     y_size = original_image.size[1]
-    max_msg_size = int(x_size * y_size / max_bits) - 1
+    max_msg_size = int(y_size / max_bits) * x_size
 
     if original_image.size != encoded_image.size:
         print 'ERROR: images are not compatible'
