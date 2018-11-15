@@ -62,7 +62,6 @@ def encode_image(image_name, output_image, message):
                     new_tuple = (new_zero_val, pixels[current_x,y + current_y][1], pixels[current_x,y + current_y][2], pixels[current_x,y + current_y][3])
                 else:
                     new_tuple = (new_zero_val, pixels[current_x,y + current_y][1], pixels[current_x,y + current_y][2])
-                new_tuple = (0, 0, 0)
                 pixels[current_x,y + current_y] = new_tuple        
 
     if final_x >= x_size:
