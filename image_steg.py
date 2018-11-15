@@ -30,39 +30,45 @@ def encode_image(image_name, output_image, message):
     pixels = input_image.load()
     x_size = input_image.size[0]
     y_size = input_image.size[1]
+    max_msg_size = int(x_size * y_size / max_bits) - 1
 
-    max_lines = int((len(encoded_message) / max_bits) + 2)
-
-    if x_size < max_lines:
-        print 'ERROR: image width too small'
+    if max_msg_size < len(encoded_message):
+        print 'ERROR: image too small'
         return False
     
-    if y_size < max_bits:
-        print 'ERROR: image height too small'
-        return False
+    y_chunk = -1
+    final_x = -1
     
     message_array = [encoded_message[i:i+max_bits] for i in range(0, len(encoded_message), max_bits)]
     for x in range(0, len(message_array)):
+        current_x = x % x_size
+        if current_x == 0:
+            y_chunk += 1
+        final_x = current_x + 1
+        current_y = y_chunk * max_bits
         for y in range(0, len(message_array[x])):
             current_char = message_array[x][y]          
             if current_char == '1':                            
                 new_zero_val = 0
-                if pixels[x,y][0] == 255:
-                    new_zero_val = pixels[x,y][0] - 2
+                if pixels[current_x,y + current_y][0] == 255:
+                    new_zero_val = pixels[current_x,y + current_y][0] - 2
                 else:
-                    new_zero_val = pixels[x,y][0] + 1
-                new_tuple = (new_zero_val, pixels[x,y][1], pixels[x,y][2], pixels[x,y][3])
-                pixels[x,y] = new_tuple        
-    
-    final_zero_val = 0
-    final_x = len(message_array)
-    if pixels[final_x,0][0] > 252:
-       final_zero_val = pixels[final_x,0][0] - 3
-    else:
-        final_zero_val = pixels[final_x,0][0] + 3
+                    new_zero_val = pixels[current_x,y + current_y][0] + 1
+                new_tuple = (new_zero_val, pixels[current_x,y + current_y][1], pixels[current_x,y + current_y][2], pixels[current_x,y + current_y][3])
+                pixels[current_x,y + current_y] = new_tuple        
 
-    new_tuple = (final_zero_val, pixels[final_x,0][1], pixels[final_x,0][2], pixels[final_x,0][3])
-    pixels[final_x,0] = new_tuple
+    if final_x >= x_size:
+        final_x = 0
+        y_chunk += 1
+    final_y = y_chunk * max_bits
+    final_zero_val = 0
+    if pixels[final_x,final_y][0] > 252:
+       final_zero_val = pixels[final_x,final_y][0] - 3
+    else:
+        final_zero_val = pixels[final_x,final_y][0] + 3
+
+    new_tuple = (final_zero_val, pixels[final_x,final_y][1], pixels[final_x,final_y][2], pixels[final_x,final_y][3])
+    pixels[final_x,final_y] = new_tuple
 
     input_image.save(output_image)
     return True
@@ -74,17 +80,24 @@ def decode_image(original_image_name, encoded_image_name):
     original_pixels = original_image.load()
     encoded_pixels = encoded_image.load()
     x_size = original_image.size[0]
+    y_size = original_image.size[1]
+    max_msg_size = int(x_size * y_size / max_bits) - 1
 
     if original_image.size != encoded_image.size:
         print 'ERROR: images are not compatible'
         return False
-    
-    for x in range(0, x_size):
-        if abs(original_pixels[x,0][0] -encoded_pixels[x,0][0]) == 3:
+
+    y_chunk = -1
+    for x in range(0, max_msg_size):
+        current_x = x % x_size
+        if current_x == 0:
+            y_chunk += 1    
+        current_y = y_chunk * max_bits        
+        if abs(original_pixels[current_x,current_y][0] -encoded_pixels[current_x,current_y][0]) == 3:
             return encoded_message
         else:
             for y in range(0, max_bits):
-                if original_pixels[x,y][0] != encoded_pixels[x,y][0]:
+                if original_pixels[current_x,y + current_y][0] != encoded_pixels[current_x,y + current_y][0]:
                     encoded_message = encoded_message + '1'
                 else:
                     encoded_message = encoded_message + '0'
