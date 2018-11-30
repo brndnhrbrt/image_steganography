@@ -8,6 +8,8 @@ This python script manipulates pixel color values to hide any ascii message 'ins
 
 Requires Python 2.7 and the pillow library
 
+Currently only works with PNG format
+
 ## Usage
 
 Help:
@@ -26,7 +28,7 @@ echo <message> | python image_steg.py -e <original_image_path> -o <output_path>
 
 Decoding:
 ```
-decoding: python image_steg.py -d <encoded_image_path> -o <original_image_path>
+decoding: python image_steg.py -d <encoded_image_path> -k <original_image_path>
 ```
 
 ## Example
