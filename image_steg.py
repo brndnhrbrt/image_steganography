@@ -118,7 +118,7 @@ def help():
     print 'image steganography'
     print 'encoding: python image_steg.py -e <original_image_path> -o <output_path> -m <message> '
     print 'encoding: echo <message> | python image_steg.py -e <original_image_path> -o <output_path>'
-    print 'decoding: python image_steg.py -d <encoded_image_path> -o <original_image_path>'
+    print 'decoding: python image_steg.py -d <encoded_image_path> -k <original_image_path>'
     print
     sys.exit(0)
 
