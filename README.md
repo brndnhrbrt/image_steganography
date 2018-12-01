@@ -69,6 +69,3 @@ Output
 Hello, world!
 ```
 
-## Errors
-
-To decode a message you will need two images with the same width and height. If your images do not meet this requirement you will recieve an error.
