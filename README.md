@@ -6,18 +6,20 @@ This python script manipulates pixel color values to hide any ascii message 'ins
 
 ## Requirements
 
-Requires Python 2.7 and the pillow library
+Requires the pillow library
 
 Currently only works with PNG format
 
 ## Usage
 
 Help:
+
 ```
 python image_steg.py -h
 ```
 
 Encoding:
+
 ```
 python image_steg.py -e <original_image_path> -o <output_path> -m <message>
 
@@ -27,6 +29,7 @@ echo <message> | python image_steg.py -e <original_image_path> -o <output_path>
 ```
 
 Decoding:
+
 ```
 decoding: python image_steg.py -d <encoded_image_path>
 ```
@@ -42,10 +45,11 @@ images/
 ```
 
 #### Encode
+
 ```
 python image_steg.py -e ./images/input_image.png -o ./images/output_image.png -m 'Hello, world!'
 
-or 
+or
 
 echo 'Hello, world!' | python image_steg.py -e ./images/input_image.png -o ./images/output_image.png
 ```
@@ -60,12 +64,13 @@ images/
 ```
 
 #### Decode
+
 ```
 python image_steg.py -d ./images/output_image.png
 ```
 
 Output
+
 ```
 Hello, world!
 ```
-
