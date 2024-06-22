@@ -34,7 +34,7 @@ def find_nearest_prime(n):
 
 def chunk(input_string):
     final_arr = []
-    for i in xrange(0, len(input_string), 3):
+    for i in range(0, len(input_string), 3):
         sub_arr = []
         sub_arr.append(input_string[i])
         if len(input_string) > i+1:
@@ -47,8 +47,8 @@ def chunk(input_string):
 
 def unchunk(input_arr):
     output_string = ''
-    for i in xrange(0, len(input_arr)):
-        for j in xrange(0, len(input_arr[i])):
+    for i in range(0, len(input_arr)):
+        for j in range(0, len(input_arr[i])):
             output_string = output_string + input_arr[i][j]
     return output_string
 
@@ -106,15 +106,15 @@ def encode_image(image_name, output_image, message):
     final_idex = len(chunk_arr) - 1
 
     if max_msg_size <= len(encoded_message):
-        print 'ERROR: image too small'
-        print 'image size:',[x_size, y_size]
-        print 'max bits: ', max_msg_size
-        print 'current message size:', len(encoded_message)
+        print('ERROR: image too small')
+        print('image size:',[x_size, y_size])
+        print('max bits: ', max_msg_size)
+        print('current message size:', len(encoded_message))
         return False
     else:
-        print 'image size:',[x_size, y_size]
-        print 'max bits: ', max_msg_size
-        print 'current message size:', len(encoded_message)
+        print('image size:',[x_size, y_size])
+        print('max bits: ', max_msg_size)
+        print('current message size:', len(encoded_message))
 
     if len(chunk_arr[final_idex]) < 3:
         for x in range(0, 3 - len(chunk_arr[final_idex])):
@@ -193,12 +193,12 @@ def decode_image(encoded_image_name):
     return False
 
 def help():
-    print
-    print 'image steganography'
-    print 'encoding: python image_steg.py -e <original_image_path> -o <output_path> -m <message> '
-    print 'encoding: echo <message> | python image_steg.py -e <original_image_path> -o <output_path>'
-    print 'decoding: python image_steg.py -d <encoded_image_path>'
-    print
+    print()
+    print('image steganography')
+    print('encoding: python image_steg.py -e <original_image_path> -o <output_path> -m <message> ')
+    print('encoding: echo <message> | python image_steg.py -e <original_image_path> -o <output_path>')
+    print('decoding: python image_steg.py -d <encoded_image_path>')
+    print()
     sys.exit(0)
 
 def main():
@@ -216,7 +216,7 @@ def main():
         opts, _ = getopt.getopt(sys.argv[1:], 'he:o:m:d:',
         ['help', 'encode', 'message', 'decode'])
     except getopt.GetoptError as err:
-        print str(err)
+        print(str(err))
         help()
 
     for opt, arg in opts:
@@ -240,27 +240,27 @@ def main():
             message = message + line
     
     if decode_flag and encode_mode:
-        print 'invalid parameters'
+        print('invalid parameters')
         help()
     elif encode_mode and (not len(message) or not len(output_file_path)):
-        print 'invalid parameters'
+        print('invalid parameters')
         help()
     
     if encode_mode:
-        print 'encoding image with your message'
+        print('encoding image with your message')
         sucess = encode_image(input_file_path, output_file_path, message)
         if sucess:
-            print 'encoding complete'
+            print('encoding complete')
         else:
-            print 'encoding failed'        
+            print('encoding failed') 
     elif decode_flag:
         decoded_message = decode_image(decode_file_path)
         if decoded_message:
-            print bin_to_string(decoded_message)
+            print(bin_to_string(decoded_message))
         else:
-            print 'decoding failed'
+            print('decoding failed')
     else:
-        print 'invalid parameters'
+        print('invalid parameters')
         help()
 
 main()
